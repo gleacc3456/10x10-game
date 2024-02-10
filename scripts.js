@@ -5,10 +5,12 @@ let playerProperties = {
   maxHealth: 20,
   food: 1,
 };
-const foodCoords = [
-  [3, 0],
+let foodCoords = [
   [8, 0],
   [2, 3],
+];
+let superFoodCoords = [
+  [3,0]
 ]
 const enemyCoords = []
 const updateInterval = 500; // Update every 1000 milliseconds (1 second)
@@ -57,6 +59,7 @@ function randomiser(digits) {
 function update() {
   const foodIndex = foodCoords.findIndex(coord => JSON.stringify(coord) === JSON.stringify(playerProperties.position));
   const enemyIndex = enemyCoords.findIndex(coord => JSON.stringify(coord) === JSON.stringify(playerProperties.position));
+  const superIndex = superFoodCoords.findIndex(coord => JSON.stringify(coord) === JSON.stringify(playerProperties.position));
 
   if ((foodIndex !== -1) && (playerProperties.maxHealth > playerProperties.health)) {
     playerProperties.health += 2;
@@ -65,6 +68,9 @@ function update() {
   if (enemyIndex !== -1) {
     playerProperties.health -= 3;
     enemyCoords.splice(enemyIndex, 1)
+  }
+  if (superIndex !== -1) {
+    playerProperties.health = playerProperties.maxHealth +1;
   }
   if (foodIndex !== -1) {
     playerProperties.food++;
@@ -92,6 +98,14 @@ function update() {
     const x = randomiser(1);
     const y = randomiser(1)
     document.getElementById(coordConv(x, y)).innerHTML = '<div class="food"></div>';
+    foodCoords.push([x, y])
+  }
+
+  if (moveCounter%25 == 0) {
+    // spawn superfood
+    const x = randomiser(1);
+    const y = randomiser(1)
+    document.getElementById(coordConv(x, y)).innerHTML = '<div class="superfood"></div>';
     foodCoords.push([x, y])
   }
 
